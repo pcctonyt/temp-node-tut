@@ -13,13 +13,34 @@
 // npm init (step by step, press enter to skip)
 // npm init -y (everything default)
 
-const _ = require("lodash");
+//The event loop allows Node.js to perform non-blocking I/O since JavaScript is single threaded (synchronous) Nodejs.dev/ for docs type event loop in YouTube course-api.com/slides for smilga's slides
 
-const items = [1, [2, [3, [4]]]];
-const newItems = _.flattenDeep(items);
-console.log(newItems);
+const { readFile } = require("fs");
 
 
+const getText = (path) => {
+    return new Promise((resolve, reject) => {
+        readFile(path, "utf8", (err,data) => {
+            if(err){
+                reject(err)
+            } else {
+                resolve(data)
+            }
+        })
+    })
+}
+
+//getText("./content/first.txt").then(result => console.log(result)).catch(err => console.log(err))
+
+const start = async() => {
+    const first = await getText("./content/first.txt");
+    console.log(first)
+}
+
+start()
 
 
-/* Node.js and Express.js - Full Course freeCodeCamp.org  1:20:59 left off*/
+
+//The process stays alive because .listen() is asynchronous.  Don't confuse it with the response, this just sets up the server, there might be an error
+
+/* Node.js and Express.js - Full Course freeCodeCamp.org  3:03:31 left off*/
