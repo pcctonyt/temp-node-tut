@@ -1,46 +1,18 @@
-// npm - gloabl command, comes with node
-// npm --version
+//,pipe() pushes from readstream into writestream
 
-// local dependency - use it only in this particular project
-// npm i <packageName>
+var http = require("http");
+var fs = require("fs");
 
-// global dependency - use it in any project
-// npm install -g <packageName>
-// sudo npm install -g <packageName> (mac)
-
-// package.json - manifest file (stores important info about project/package)'
-// manual approach (create package.json in the root, create properties etc)
-// npm init (step by step, press enter to skip)
-// npm init -y (everything default)
-
-//The event loop allows Node.js to perform non-blocking I/O since JavaScript is single threaded (synchronous) Nodejs.dev/ for docs type event loop in YouTube course-api.com/slides for smilga's slides
-
-const { readFile } = require("fs");
-
-
-const getText = (path) => {
-    return new Promise((resolve, reject) => {
-        readFile(path, "utf8", (err,data) => {
-            if(err){
-                reject(err)
-            } else {
-                resolve(data)
-            }
-        })
+http.createServer(function (req, res) {
+    //const text = fs.readFileSync("./content/big.txt", "utf8");
+    //res.end(text);
+    const fileStream = fs.createReadStream("./content/big.txt", "utf8");
+    fileStream.on("open", () => {
+        fileStream.pipe(res)
     })
-}
+    fileStream.on("error", (err) => {
+        res.end(err)
+    })
+}).listen(5000);
 
-//getText("./content/first.txt").then(result => console.log(result)).catch(err => console.log(err))
-
-const start = async() => {
-    const first = await getText("./content/first.txt");
-    console.log(first)
-}
-
-start()
-
-
-
-//The process stays alive because .listen() is asynchronous.  Don't confuse it with the response, this just sets up the server, there might be an error
-
-/* Node.js and Express.js - Full Course freeCodeCamp.org  3:03:31 left off*/
+/* Node.js and Express.js - Full Course freeCodeCamp.org  3:50:28 left off*/
